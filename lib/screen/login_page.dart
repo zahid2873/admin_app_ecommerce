@@ -1,3 +1,4 @@
+import 'package:admin_app_ecommerce/screen/navbar/home_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -30,7 +31,12 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: "Enter your email",
                 border: OutlineInputBorder(),
               ),
-              validator:(emailController){},
+              validator:(value){
+                if(value == null || value.isEmpty || !value.contains('@') || !value.contains('.')){
+                  return 'Invalid Email';
+                }
+                return null;
+              },
             ),
             SizedBox(height: 20,),
             TextFormField(
@@ -42,10 +48,10 @@ class _LoginPageState extends State<LoginPage> {
                 suffixIcon:IconButton(onPressed: (){
                   setState(() {
                     if(pressCount % 2==0){
-                    isObscure=false;}
-                    else{
+                      isObscure=false;
+                    }else{
                       isObscure=true;
-                    };
+                    }
                     pressCount++;
                   }
                   );
@@ -53,14 +59,21 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 border: OutlineInputBorder(),
               ),
-              validator:(emailController){},
+              validator:(value){
+                if(value==null) {
+                  return "Please enter email";
+                }
+                return null;
+              },
             ),
             SizedBox(height: 20,),
             MaterialButton(
               height: 60,
               minWidth: double.infinity,
               color: Colors.blue,
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+              },
               child: Text('Login'),
             )
           ],
