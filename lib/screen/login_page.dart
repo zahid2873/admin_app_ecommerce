@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:admin_app_ecommerce/screen/navbar/home_page.dart';
+import 'package:admin_app_ecommerce/screen/navbar/nav_bar_page.dart';
 import 'package:admin_app_ecommerce/widget/custome_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isObscure=true;
   int pressCount=0;
+
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -117,17 +121,47 @@ class _LoginPageState extends State<LoginPage> {
       var data = jsonDecode(responce.body);
       setState(() {
         isLoading=false;
-        if(responce.statusCode==200){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
-        }else{
-          print("Api integration is unsuccessful");
-        }
+        // if(responce.statusCode==200){
+        //   Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+        // }else{
+        //   print("Api integration is unsuccessful");
+        // }
       });
       print("Responce is ${data}");
       print("Status code is ${responce.statusCode}");
+
+      if(responce.statusCode==200){
+        showInToast("Login Successfull");
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        sharedPreferences.setString('token', data["access_token"]);
+        print("Saved token is  ${sharedPreferences.getString("token")}");
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBarPage()));
+
+      }else{
+        showInToast("Invalid email or password");
+      }
+
+
     }catch(e){
       print("Something wrong $e");
     }
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    isLogin();
+    super.initState();
+  }
+
+
+  isLogin()async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    if(token!=null){
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBarPage()));
+    }
+  }
+
 
 }
