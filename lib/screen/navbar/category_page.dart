@@ -9,6 +9,13 @@ class CategoryPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("CategoryPage"),
       ),
+      body: Container(
+        child: Column(
+          children: [
+            Text("Categories")
+          ],
+        ),
+      ),
     );
   }
 }
