@@ -6,6 +6,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
+String baseUrl = "http://temp.techsolutions-bd.com/api/admin/";
+String imgBaseUrl = "http://temp.techsolutions-bd.com/images/";
+
 textStyle(double size,[ Color ? clr, FontWeight ? fw ]){
   return GoogleFonts.roboto(
     fontSize: size,

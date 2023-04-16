@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:admin_app_ecommerce/custome_http/custome_http_request.dart';
 import 'package:admin_app_ecommerce/screen/login_page.dart';
+import 'package:admin_app_ecommerce/widget/custome_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/category_model.dart';
@@ -31,6 +32,7 @@ class _CategoryPageState extends State<CategoryPage> {
           categorymodel = CategoryModel.fromJson(i);
           setState(() {
             categoryList.add(categorymodel!);
+            print(categoryList.length);
           });
         }
       }
@@ -52,13 +54,43 @@ class _CategoryPageState extends State<CategoryPage> {
       appBar: AppBar(
         title: Text("CategoryPage"),
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Text("Categories")
-          ],
-        ),
-      ),
-    );
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              Text("Categories"),
+              SizedBox(height: 20,),
+              categoryList.isNotEmpty? ListView.builder(
+                itemCount: categoryList.length,
+                  scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (contex,index){
+                return Container(
+                  height: 200,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 140,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(image: NetworkImage("${imgBaseUrl}${categoryList[index].image}"),fit: BoxFit.cover)
+                        ),
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage("${imgBaseUrl}${categoryList[index].icon}"),
+                        ),
+
+                      ),
+                      Text("${categoryList[index].name}"),
+                    ],
+                  ),
+                );
+              }):Text("No item found")
+          ]
+          )
+    ),
+      )
+            );
   }
 }

@@ -165,5 +165,4 @@ class _LoginPageState extends State<LoginPage> {
 
 
 }
-String baseUrl = "http://temp.techsolutions-bd.com/api/admin/";
 
