@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:admin_app_ecommerce/custome_http/custome_http_request.dart';
+import 'package:admin_app_ecommerce/provider/category_provider.dart';
 import 'package:admin_app_ecommerce/screen/login_page.dart';
 import 'package:admin_app_ecommerce/widget/custome_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/category_model.dart';
 import 'package:http/http.dart' as http;
@@ -17,39 +19,19 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
 
-  CategoryModel ? categorymodel;
-  List<CategoryModel> categoryList=[];
 
-  getCategories()async{
-    try{
-      var url = "${baseUrl}category";
-      var responce = await http.get(Uri.parse(url),headers: await CustomHttpRequest.getHeaderWithToken());
-      print('Api heat ${responce.body}');
-      if(responce.statusCode==200){
-        var data = jsonDecode(responce.body);
-        print("data are ${data}");
-        for(var i in data){
-          categorymodel = CategoryModel.fromJson(i);
-          setState(() {
-            categoryList.add(categorymodel!);
-            print(categoryList.length);
-          });
-        }
-      }
-    }catch(e){
-      print("Something wrong $e");
-    }
-  }
 
   @override
   void initState() {
     // TODO: implement initState
-    getCategories();
+    Provider.of<CategoryProvider>(context,listen: false).getCategoryData();
+    //getCategories();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var category = Provider.of<CategoryProvider>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("CategoryPage"),
@@ -60,8 +42,8 @@ class _CategoryPageState extends State<CategoryPage> {
             children: [
               Text("Categories"),
               SizedBox(height: 20,),
-              categoryList.isNotEmpty? ListView.builder(
-                itemCount: categoryList.length,
+              category.categoryList.isNotEmpty? ListView.builder(
+                itemCount: category.categoryList.length,
                   scrollDirection: Axis.vertical,
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -71,18 +53,20 @@ class _CategoryPageState extends State<CategoryPage> {
                   child: Column(
                     children: [
                       Container(
+                        alignment: Alignment.bottomRight,
                         height: 140,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          image: DecorationImage(image: NetworkImage("${imgBaseUrl}${categoryList[index].image}"),fit: BoxFit.cover)
+                          image: DecorationImage(image: NetworkImage("${imgBaseUrl}${category.categoryList[index].image}"),fit: BoxFit.cover)
                         ),
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage("${imgBaseUrl}${categoryList[index].icon}"),
+                          radius: 40,
+                          backgroundImage: NetworkImage("${imgBaseUrl}${category.categoryList[index].icon}"),
                         ),
 
                       ),
-                      Text("${categoryList[index].name}"),
+                      Text("${category.categoryList[index].name}",style: textStyle(24,Colors.black,FontWeight.bold),),
                     ],
                   ),
                 );

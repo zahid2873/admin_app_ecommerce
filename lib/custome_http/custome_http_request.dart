@@ -1,6 +1,12 @@
 
 
+import 'dart:convert';
+
+import 'package:admin_app_ecommerce/model/category_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../widget/custome_widget.dart';
+import 'package:http/http.dart' as http;
 
 class CustomHttpRequest{
 
@@ -12,5 +18,30 @@ class CustomHttpRequest{
       "Authorization": "Bearer ${sharedPreferences.getString('token')}",
     };
     return header;
+  }
+
+
+
+
+  static Future<dynamic> getCategories()async{
+    CategoryModel ? categorymodel;
+    List<CategoryModel> categoryList=[];
+    try{
+      var url = "${baseUrl}category";
+      var responce = await http.get(Uri.parse(url),headers: await CustomHttpRequest.getHeaderWithToken());
+      print('Api heat ${responce.body}');
+      if(responce.statusCode==200){
+        var data = jsonDecode(responce.body);
+        print("data are ${data}");
+        for(var i in data){
+          categorymodel = CategoryModel.fromJson(i);
+            categoryList.add(categorymodel!);
+            print(categoryList.length);
+        }
+      }
+    }catch(e){
+      print("Something wrong $e");
+    }
+    return categoryList;
   }
 }
