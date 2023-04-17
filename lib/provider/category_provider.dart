@@ -10,7 +10,9 @@ class CategoryProvider with ChangeNotifier{
   List <CategoryModel> categoryList=[];
 
   getCategoryData()async{
+    //isLoading = true;
     categoryList = await CustomHttpRequest.getCategories();
+    //isLoading = false;
     notifyListeners();
   }
 }

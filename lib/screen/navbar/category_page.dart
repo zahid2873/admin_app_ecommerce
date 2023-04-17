@@ -5,6 +5,7 @@ import 'package:admin_app_ecommerce/provider/category_provider.dart';
 import 'package:admin_app_ecommerce/screen/login_page.dart';
 import 'package:admin_app_ecommerce/widget/custome_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/category_model.dart';
@@ -20,10 +21,21 @@ class CategoryPage extends StatefulWidget {
 class _CategoryPageState extends State<CategoryPage> {
 
 
+  // bool isLoading = false;
+  // fetchData(){
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   Provider.of<CategoryProvider>(context,listen: false).getCategoryData();
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
+    //fetchData();
     Provider.of<CategoryProvider>(context,listen: false).getCategoryData();
     //getCategories();
     super.initState();
@@ -31,7 +43,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    var category = Provider.of<CategoryProvider>(context,listen: false);
+    var category = Provider.of<CategoryProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("CategoryPage"),
@@ -51,6 +63,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 return Container(
                   height: 200,
                   child: Column(
+                    //crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         alignment: Alignment.bottomRight,
@@ -70,7 +83,8 @@ class _CategoryPageState extends State<CategoryPage> {
                     ],
                   ),
                 );
-              }):Text("No item found")
+              }):Center(
+                child: CircularProgressIndicator(),)
           ]
           )
     ),
