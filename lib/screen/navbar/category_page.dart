@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:admin_app_ecommerce/custome_http/custome_http_request.dart';
 import 'package:admin_app_ecommerce/provider/category_provider.dart';
+import 'package:admin_app_ecommerce/screen/edit_category.dart';
 import 'package:admin_app_ecommerce/screen/login_page.dart';
 import 'package:admin_app_ecommerce/widget/custome_widget.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   shrinkWrap: true,
                   itemBuilder: (contex,index){
                 return Container(
-                  height: 200,
+                  height: 220,
                   child: Column(
                     //crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -80,11 +81,24 @@ class _CategoryPageState extends State<CategoryPage> {
 
                       ),
                       Text("${category.categoryList[index].name}",style: textStyle(24,Colors.black,FontWeight.bold),),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.blue.withOpacity(.3),
+                              child: IconButton(onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (_)=>EditCategoryPage(categoryModel: category.categoryList[index],)));
+                              }, icon: Icon(Icons.edit,color: Colors.green,))),
+                            CircleAvatar(child: IconButton(onPressed: (){}, icon: Icon(Icons.delete,color: Colors.red,)))
+                        ],),
+                      )
                     ],
                   ),
                 );
               }):Center(
-                child: CircularProgressIndicator(),)
+               child: CircularProgressIndicator(),)
           ]
           )
     ),
