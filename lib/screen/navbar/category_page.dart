@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:admin_app_ecommerce/custome_http/custome_http_request.dart';
 import 'package:admin_app_ecommerce/provider/category_provider.dart';
+import 'package:admin_app_ecommerce/screen/add_category.dart';
 import 'package:admin_app_ecommerce/screen/edit_category.dart';
 import 'package:admin_app_ecommerce/screen/login_page.dart';
 import 'package:admin_app_ecommerce/widget/custome_widget.dart';
@@ -46,6 +47,12 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     var category = Provider.of<CategoryProvider>(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddCategory()));
+        },
+        child: Icon(Icons.add),
+      ),
       appBar: AppBar(
         title: Text("CategoryPage"),
       ),
