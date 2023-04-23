@@ -143,6 +143,9 @@ class _LoginPageState extends State<LoginPage> {
 
 
     }catch(e){
+      setState(() {
+        isLoading = false;
+      });
       print("Something wrong $e");
     }
   }
