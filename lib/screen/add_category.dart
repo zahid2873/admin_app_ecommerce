@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:admin_app_ecommerce/custome_http/custome_http_request.dart';
+import 'package:admin_app_ecommerce/provider/category_provider.dart';
 import 'package:admin_app_ecommerce/widget/custome_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 
 class AddCategory extends StatefulWidget {
   const AddCategory({Key? key}) : super(key: key);
@@ -130,7 +132,9 @@ class _AddCategoryState extends State<AddCategory> {
                   )
               ),
               SizedBox(height: 40,),
-              MaterialButton(onPressed: (){},
+              MaterialButton(onPressed: (){
+                uploadCategory();
+              },
                 height: 50,
                 minWidth: double.infinity,
                 color: Colors.teal,
@@ -168,6 +172,14 @@ class _AddCategoryState extends State<AddCategory> {
       var responceString = String.fromCharCodes(responceData);
       var data = jsonDecode(responceString);
       print(data);
+      print(responce.statusCode);
+      if(responce.statusCode == 201){
+        showInToast("Category uploaded successfull");
+        Provider.of<CategoryProvider>(context).getCategoryData();
+        Navigator.pop(context);
+      }else{
+        showInToast("Somthing wrong, please try again");
+      }
     }catch(e){
       setState(() {
         isLoading = false;

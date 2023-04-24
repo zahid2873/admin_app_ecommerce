@@ -58,55 +58,59 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          child: Column(
-            children: [
-              Text("Categories"),
-              SizedBox(height: 20,),
-              category.categoryList.isNotEmpty? ListView.builder(
-                itemCount: category.categoryList.length,
-                  scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (contex,index){
-                return Container(
-                  height: 220,
-                  child: Column(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        alignment: Alignment.bottomRight,
-                        height: 140,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          image: DecorationImage(image: NetworkImage("${imgBaseUrl}${category.categoryList[index].image}"),fit: BoxFit.cover)
-                        ),
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundImage: NetworkImage("${imgBaseUrl}${category.categoryList[index].icon}"),
-                        ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text("Categories"),
+                SizedBox(height: 20,),
+                category.categoryList.isNotEmpty? ListView.builder(
+                  itemCount: category.categoryList.length,
+                    scrollDirection: Axis.vertical,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (contex,index){
+                  return Container(
+                    height: 220,
+                    child: Column(
+                      //crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          alignment: Alignment.bottomRight,
+                          height: 140,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            image: DecorationImage(image: NetworkImage("${imgBaseUrl}${category.categoryList[index].image}"),fit: BoxFit.cover)
+                          ),
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundImage: NetworkImage("${imgBaseUrl}${category.categoryList[index].icon}"),
+                          ),
 
-                      ),
-                      Text("${category.categoryList[index].name}",style: textStyle(24,Colors.black,FontWeight.bold),),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.blue.withOpacity(.3),
-                              child: IconButton(onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (_)=>EditCategoryPage(categoryModel: category.categoryList[index],)));
-                              }, icon: Icon(Icons.edit,color: Colors.green,))),
-                            CircleAvatar(child: IconButton(onPressed: (){}, icon: Icon(Icons.delete,color: Colors.red,)))
-                        ],),
-                      )
-                    ],
-                  ),
-                );
-              }):Center(
-               child: CircularProgressIndicator(),)
-          ]
+                        ),
+                        Text("${category.categoryList[index].name}",style: textStyle(24,Colors.black,FontWeight.bold),),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.blue.withOpacity(.3),
+                                child: IconButton(onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (_)=>EditCategoryPage(categoryModel: category.categoryList[index],))).then((value){
+                                    Provider.of<CategoryProvider>(context,listen: false).getCategoryData();
+                                  });
+                                }, icon: Icon(Icons.edit,color: Colors.green,))),
+                              CircleAvatar(child: IconButton(onPressed: (){}, icon: Icon(Icons.delete,color: Colors.red,)))
+                          ],),
+                        )
+                      ],
+                    ),
+                  );
+                }):Center(
+                 child: CircularProgressIndicator(),)
+            ]
+            ),
           )
     ),
       )
