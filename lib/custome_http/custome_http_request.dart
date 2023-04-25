@@ -44,4 +44,16 @@ class CustomHttpRequest{
     }
     return categoryList;
   }
+
+  static Future<bool> deleteCategoryData(int ? id)async{
+    var uri = "${baseUrl}category/${id}/delete";
+    var responce = await http.delete(Uri.parse(uri),headers: await getHeaderWithToken());
+    final data = jsonDecode(responce.body);
+    print("reponce data is $data");
+    if(responce.statusCode==200){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }

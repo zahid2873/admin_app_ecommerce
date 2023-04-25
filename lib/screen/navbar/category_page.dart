@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../model/category_model.dart';
 import 'package:http/http.dart' as http;
 
+
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
 
@@ -101,7 +102,32 @@ class _CategoryPageState extends State<CategoryPage> {
                                     Provider.of<CategoryProvider>(context,listen: false).getCategoryData();
                                   });
                                 }, icon: Icon(Icons.edit,color: Colors.green,))),
-                              CircleAvatar(child: IconButton(onPressed: (){}, icon: Icon(Icons.delete,color: Colors.red,)))
+                              CircleAvatar(child: IconButton(onPressed: (){
+                                showDialog(context: context, builder: (context){
+                                  return AlertDialog(
+                                    title: Text("Are you sure?"),
+                                    content: Text("You want delete data"),
+                                    actions: [
+                                      TextButton(onPressed: ()async{
+                                        bool isDelete= await CustomHttpRequest.deleteCategoryData(category.categoryList[index].id);
+                                        print("IS delete value is $isDelete");
+                                        Navigator.pop(context);
+                                        if(isDelete==true){
+                                          showInToast("Category Delete is successful");
+                                          setState(() {
+                                            category.categoryList.removeAt(index);
+                                          });
+                                        }else{
+                                          showInToast("Category not delete, please try again");
+                                        }
+                                      }, child: Text("Delete")),
+                                      TextButton(onPressed: (){
+                                        Navigator.pop(context);
+                                      }, child: Text("Cancel")),
+                                    ],
+                                  );
+                                });
+                              }, icon: Icon(Icons.delete,color: Colors.red,)))
                           ],),
                         )
                       ],
@@ -114,6 +140,8 @@ class _CategoryPageState extends State<CategoryPage> {
           )
     ),
       )
-            );
+    );
   }
+
+
 }
